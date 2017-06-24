@@ -46,7 +46,7 @@ public class Menu {
             else if (operation.equals("5")) {
                 System.exit(0);
             }
-            else System.out.println("Please select number from the menu.");
+            else System.out.println("You've putted wrong number, try again.");
 
         } while (switcher);
         connection.close();
