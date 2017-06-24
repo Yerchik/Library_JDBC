@@ -1,13 +1,21 @@
+package App;
+
+import DB.BookDB;
+import Entity.Book;
+
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import static DB.BookDB.scanner;
+
 /**
- * Created by Yerchik on 12.04.2017.
+ * Created by Yerchik on 23.06.2017.
  */
 public class Methods {
-    public static void menu() throws SQLException {
+    public static void menu() throws SQLException, IOException {
         Connection connection = (Connection) DriverManager
                 .getConnection(
                         "jdbc:mysql://localhost:3306/library?verifyServerCertificate=false&useSSL=true",
@@ -23,18 +31,16 @@ public class Methods {
 
             int operation = scanner.nextInt();
             if (operation == 1) {
-                BookDB.addNewBook(connection);
+                add(connection);
             }
             if (operation == 2) {
-                BookDB.removeBook(connection);
+                remove(connection);
             }
             if (operation == 3) {
                 BookDB.editBook(connection);
             }
             if (operation == 4) {
-                BookDB.getAll(connection);
-                System.out.println("enter any key.");
-                scanner.next();
+                all(connection);
             }
             if (operation == 5) {
                 System.exit(0);
@@ -46,6 +52,32 @@ public class Methods {
         connection.close();
     }
 
+    public static void add(Connection connection) throws SQLException, IOException {
+        System.out.println("Input author_name:");
+        String author = scanner.next();
+        System.out.println("Input book_name: ");
+        String bookName = scanner.next();
+        BookDB.addNewBook(author, bookName, connection);
+        System.out.println(new Book(author, bookName) + " was added.");
+        System.out.println("Pres any button:");
+        System.in.read();
+    }
+
+    public static void remove(Connection connection){
+
+    }
+
+    public static void all(Connection connection) throws IOException, SQLException {
+        int i = 1;
+        System.out.println("All books:");
+        for (Book book : BookDB.getAll(connection)) {
+            System.out.println("" + i + ". " + book);
+            i++;
+        }
+        System.out.println("Pres any button:");
+        System.in.read();
+    }
+
     public static void initializeDatabase(Connection connection)
             throws SQLException {
         BookDB.createBooktTable(connection);
@@ -53,3 +85,4 @@ public class Methods {
     }
 
 }
+

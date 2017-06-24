@@ -1,5 +1,7 @@
+package Entity;
+
 /**
- * Created by Yerchik on 12.04.2017.
+ * Created by Yerchik on 23.06.2017.
  */
 public class Book {
     private int id;

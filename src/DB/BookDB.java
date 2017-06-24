@@ -1,17 +1,20 @@
+package DB;
+
+import Entity.Book;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
- * Created by Yerchik on 12.04.2017.
+ * Created by Yerchik on 23.06.2017.
  */
 public class BookDB {
     public static Scanner scanner = new Scanner(System.in);
-    private static int id;
-    private static String author;
-    private static String bookName;
     private static java.sql.PreparedStatement preparedStatement;
     private static ResultSet resultSet;
 
@@ -22,35 +25,34 @@ public class BookDB {
         preparedStatement.execute();
     }
 
-    public static void addNewBook(java.sql.Connection connection)
+    public static void addNewBook(String author, String bookName, java.sql.Connection connection)
             throws SQLException {
-        System.out.println("Input author_name:");
-        String author = scanner.next();
-        System.out.println("Input book_name: ");
-        String bookName = scanner.next();
         preparedStatement = connection
                 .prepareStatement("insert into book(author, name ) VALUES (?,?)");
         preparedStatement.setString(1, author);
         preparedStatement.setString(2, bookName);
         preparedStatement.execute();
-        System.out.println(new Book(author, bookName) + " was added.");
-        System.out.println("enter any key:");
-        scanner.next();
+
     }
 
-    public static void getAll(java.sql.Connection connection)
+    public static List<Book> getAll(java.sql.Connection connection)
             throws SQLException {
-        System.out.println("All books:");
+        List<Book> books = new ArrayList<>();
         preparedStatement = (PreparedStatement) connection
                 .prepareStatement("select * from book ");
         resultSet = preparedStatement.executeQuery();
         int i = 1;
         while (resultSet.next()) {
             Book book = new Book(resultSet.getString("author"), resultSet.getString("name"));
-            System.out.println(i + ": " + book);
-            i++;
+            books.add(book);
         }
+        return books;
+    }
 
+    public static List<Book> findByName(String name, java.sql.Connection connection){
+        List<Book> books = new ArrayList<>();
+
+        return books;
     }
 
     public static void removeBook(java.sql.Connection connection)
@@ -81,7 +83,7 @@ public class BookDB {
             if (i == 1){
                 System.out.print(book);
                 preparedStatement = (PreparedStatement) connection
-                            .prepareStatement("DELETE from book WHERE id = ?");
+                        .prepareStatement("DELETE from book WHERE id = ?");
                 preparedStatement.setInt(1, book.getId());
                 preparedStatement.executeUpdate();
                 a = false;
