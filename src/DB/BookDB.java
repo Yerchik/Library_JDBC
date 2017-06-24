@@ -18,7 +18,7 @@ public class BookDB {
     private static java.sql.PreparedStatement preparedStatement;
     private static ResultSet resultSet;
 
-    public static void createBooktTable(java.sql.Connection connection)
+    public static void createBookTable(java.sql.Connection connection)
             throws SQLException {
         preparedStatement = (PreparedStatement) connection
                 .prepareStatement("create table if not exists book(id int primary key auto_increment, author varchar(30) not null , name varchar(30) not null );");
@@ -83,68 +83,5 @@ public class BookDB {
 
     }
 
-    public static void getSameBook(String bookName, Connection connection) throws SQLException {
-        preparedStatement = (PreparedStatement) connection
-                .prepareStatement("select * from book WHERE name like ?");
-        preparedStatement.setString(1, bookName);
-        resultSet = preparedStatement.executeQuery();
-        Book book;
-        int i = 0;
-        while (resultSet.next()) {
-            i++;
-            book = new Book(resultSet.getString("author"), resultSet.getString("name"));
-            System.out.println(i + ": " + book);
-        }
-    }
-
-    public static void deleteSameBook(String bookName, int j, Connection connection) throws SQLException {
-        preparedStatement = (PreparedStatement) connection
-                .prepareStatement("select * from book WHERE name like ?");
-        preparedStatement.setString(1, bookName);
-        resultSet = preparedStatement.executeQuery();
-        Book book;
-        int i = 0;
-        while (resultSet.next()) {
-            i++;
-            book = new Book(resultSet.getString("author"), resultSet.getString("name"));
-            book.setId(resultSet.getInt("id"));
-            if (i == j) {
-                System.out.print(book);
-                preparedStatement = (PreparedStatement) connection
-                        .prepareStatement("DELETE from book WHERE id = ?");
-                preparedStatement.setInt(1, book.getId());
-                preparedStatement.executeUpdate();
-                System.out.println(" was removed.");
-                System.out.println("enter any key");
-            }
-        }
-    }
-
-    public static void editSameBook(String bookName, int j, Connection connection) throws SQLException {
-        preparedStatement = (PreparedStatement) connection
-                .prepareStatement("select * from book WHERE name like ?");
-        preparedStatement.setString(1, bookName);
-        resultSet = preparedStatement.executeQuery();
-        Book book;
-        int i = 0;
-        while (resultSet.next()) {
-            i++;
-            book = new Book(resultSet.getString("author"), resultSet.getString("name"));
-            book.setId(resultSet.getInt("id"));
-            if (i == j) {
-                System.out.println("please enter new name of book.");
-                String newBookName = scanner.next();
-                System.out.print(book);
-                preparedStatement = (PreparedStatement) connection
-                        .prepareStatement("UPDATE book set name = ? WHERE id = ?");
-                preparedStatement.setString(1, newBookName);
-                preparedStatement.setInt(2, book.getId());
-                preparedStatement.executeUpdate();
-                book.setBookName(newBookName);
-                System.out.println(" was changed to: " + book);
-                System.out.println("enter any key");
-            }
-        }
-    }
 
 }

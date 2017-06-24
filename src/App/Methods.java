@@ -162,7 +162,7 @@ public class Methods {
 
     public static void initializeDatabase(Connection connection)
             throws SQLException {
-        BookDB.createBooktTable(connection);
+        BookDB.createBookTable(connection);
 
     }
 
