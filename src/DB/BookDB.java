@@ -63,107 +63,27 @@ public class BookDB {
         return books;
     }
 
-    public static void removeBook(java.sql.Connection connection)
+    public static void removeBook(int id, java.sql.Connection connection)
             throws SQLException {
-        boolean a = false;
-        Book book = new Book();
-        do {
-            System.out.println("Input book_name, that you want to remove:");
-            String bookName = scanner.next();
-            preparedStatement = (PreparedStatement) connection
-                    .prepareStatement("select * from book WHERE name like ?");
-            preparedStatement.setString(1, bookName);
-            resultSet = preparedStatement.executeQuery();
-            int i = 0;
-            while (resultSet.next()) {
-                i++;
-                book = new Book(resultSet.getString("author"), resultSet.getString("name"));
-                book.setId(resultSet.getInt("id"));
-            }
-            if (i == 0){
-                System.out.println("we don't have such book.");
-                getAll(connection);
-                System.out.println(" 1 - Try again.\n 2 - Main menu.");
-                int operation = scanner.nextInt();
-                if(operation == 1) a = true;
-                if(operation == 2) a = false;
-            }
-            if (i == 1){
-                System.out.print(book);
-                preparedStatement = (PreparedStatement) connection
-                        .prepareStatement("DELETE from book WHERE id = ?");
-                preparedStatement.setInt(1, book.getId());
-                preparedStatement.executeUpdate();
-                a = false;
-                System.out.println(" was removed.");
-                System.out.println("enter any key:");
-                scanner.next();
-            }
-            if (i > 1){
-                System.out.println("We have few books with such name please choose one by typing a number of book:");
-                getSameBook(bookName, connection);
-                int num = scanner.nextInt();
-                deleteSameBook(bookName, num, connection);
-                scanner.next();
-                a = false;
-            }
-        }while (a);
+        preparedStatement = (PreparedStatement) connection
+                .prepareStatement("DELETE from book WHERE id = ?");
+        preparedStatement.setInt(1, id);
+        preparedStatement.executeUpdate();
 
     }
 
-    public static void editBook(Connection connection)throws SQLException {
-        boolean a = false;
-        Book book = new Book();
-        do {
-            System.out.println("Input book_name, that you want to edit:");
-            String bookName = scanner.next();
-            preparedStatement = (PreparedStatement) connection
-                    .prepareStatement("select * from book WHERE name like ?");
-            preparedStatement.setString(1, bookName);
-            resultSet = preparedStatement.executeQuery();
-            int i = 0;
-            while (resultSet.next()) {
-                i++;
-                book = new Book(resultSet.getString("author"), resultSet.getString("name"));
-                book.setId(resultSet.getInt("id"));
-            }
-            if (i == 0) {
-                System.out.println("we don't have such book.");
-                getAll(connection);
-                System.out.println(" 1 - Try again.\n 2 - Main menu");
-                int operation = scanner.nextInt();
-                if (operation == 1) a = true;
-                if (operation == 2) a = false;
-            }
-            if (i == 1) {
-                System.out.println("please enter new name of book.");
-                String  newBookName = scanner.next();
-                System.out.print(book);
-                preparedStatement = (PreparedStatement) connection
-                        .prepareStatement("UPDATE book set name = ? WHERE id = ?");
-                preparedStatement.setString(1, newBookName);
-                preparedStatement.setInt(2, book.getId());
-                preparedStatement.executeUpdate();
-                a = false;
-                book.setBookName(newBookName);
-                System.out.println(" was changed to: " + book);
-                System.out.println("enter any key");
-                scanner.next();
-            }
-            if (i > 1){
-                System.out.println("We have few books with such name please choose one by typing a number of book:");
-                getSameBook(bookName, connection);
-                int num = scanner.nextInt();
-                int j = 1;
-                editSameBook(bookName, num, connection);
-                scanner.next();
-                a = false;
-            }
 
-        }while (a);
+    public static void editBook(String newBookName, int id, Connection connection) throws SQLException {
+
+        preparedStatement = (PreparedStatement) connection
+                .prepareStatement("UPDATE book set name = ? WHERE id = ?");
+        preparedStatement.setString(1, newBookName);
+        preparedStatement.setInt(2, id);
+        preparedStatement.executeUpdate();
+
     }
 
-    public static void getSameBook(String bookName, Connection connection)throws SQLException {
+    public static void getSameBook(String bookName, Connection connection) throws SQLException {
         preparedStatement = (PreparedStatement) connection
                 .prepareStatement("select * from book WHERE name like ?");
         preparedStatement.setString(1, bookName);
@@ -188,7 +108,7 @@ public class BookDB {
             i++;
             book = new Book(resultSet.getString("author"), resultSet.getString("name"));
             book.setId(resultSet.getInt("id"));
-            if (i == j ){
+            if (i == j) {
                 System.out.print(book);
                 preparedStatement = (PreparedStatement) connection
                         .prepareStatement("DELETE from book WHERE id = ?");
@@ -211,9 +131,9 @@ public class BookDB {
             i++;
             book = new Book(resultSet.getString("author"), resultSet.getString("name"));
             book.setId(resultSet.getInt("id"));
-            if (i == j ){
+            if (i == j) {
                 System.out.println("please enter new name of book.");
-                String  newBookName = scanner.next();
+                String newBookName = scanner.next();
                 System.out.print(book);
                 preparedStatement = (PreparedStatement) connection
                         .prepareStatement("UPDATE book set name = ? WHERE id = ?");
