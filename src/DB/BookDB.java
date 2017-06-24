@@ -49,9 +49,17 @@ public class BookDB {
         return books;
     }
 
-    public static List<Book> findByName(String name, java.sql.Connection connection){
+    public static List<Book> findByName(String bookName, java.sql.Connection connection) throws SQLException {
         List<Book> books = new ArrayList<>();
-
+        preparedStatement = (PreparedStatement) connection
+                .prepareStatement("select * from book WHERE name like ?");
+        preparedStatement.setString(1, bookName);
+        resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            Book book = new Book(resultSet.getString("author"), resultSet.getString("name"));
+            book.setId(resultSet.getInt("id"));
+            books.add(book);
+        }
         return books;
     }
 

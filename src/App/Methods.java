@@ -64,7 +64,7 @@ public class Methods {
     }
 
     public static void remove(Connection connection){
-
+        boolean a = false;
     }
 
     public static void all(Connection connection) throws IOException, SQLException {
