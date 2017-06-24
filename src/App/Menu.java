@@ -15,7 +15,7 @@ import static DB.BookDB.scanner;
 /**
  * Created by Yerchik on 23.06.2017.
  */
-public class Methods {
+public class Menu {
     public static void menu() throws SQLException, IOException {
         Connection connection = (Connection) DriverManager
                 .getConnection(
