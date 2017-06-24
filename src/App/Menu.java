@@ -33,20 +33,15 @@ public class Menu {
             String operation = scanner.next();
             if (operation.equals("1")) {
                 add(connection);
-            }
-            else if (operation.equals("2")) {
+            } else if (operation.equals("2")) {
                 remove(connection);
-            }
-            else if (operation.equals("3")) {
+            } else if (operation.equals("3")) {
                 edit(connection);
-            }
-            else if (operation.equals("4")) {
+            } else if (operation.equals("4")) {
                 all(connection);
-            }
-            else if (operation.equals("5")) {
+            } else if (operation.equals("5")) {
                 System.exit(0);
-            }
-            else System.out.println("You've putted wrong number, try again.");
+            } else System.out.println("You've putted wrong number, try again.");
 
         } while (switcher);
         connection.close();
@@ -69,21 +64,19 @@ public class Menu {
             System.out.println("Input book_name, that you want to remove:");
             String bookName = scanner.next();
             List<Book> books = BookDB.findByName(bookName, connection);
-            if (BookDB.findByName(bookName, connection).size() == 0){
+            if (BookDB.findByName(bookName, connection).size() == 0) {
                 System.out.println("we don't have such book.");
                 all(connection);
                 System.out.println(" 1 - Try again.\n 2 - Main menu.");
                 String operation = scanner.next();
-                if(operation.equals("1")) a = true;
-                if(operation.equals("2")) a = false;
-            }
-            else if (books.size() == 1){
+                if (operation.equals("1")) a = true;
+                if (operation.equals("2")) a = false;
+            } else if (books.size() == 1) {
                 System.out.print(books.get(0));
                 BookDB.removeBook(books.get(0).getId(), connection);
                 a = false;
                 System.out.println(" was removed.");
-            }
-            else {
+            } else {
                 int i = 1;
                 System.out.println("We have few books with such name please choose one by typing a number of book:");
                 for (Book book : BookDB.findByName(bookName, connection)) {
@@ -91,16 +84,15 @@ public class Menu {
                     i++;
                 }
                 int number = scanner.nextInt();
-                if (number < i){
+                if (number < i) {
                     System.out.print(books.get(number - 1));
                     BookDB.removeBook(books.get(number - 1).getId(), connection);
                     a = false;
                     System.out.println(" was removed.");
-                }
-                else System.out.println("You've putted wrong number, try again.");
+                } else System.out.println("You've putted wrong number, try again.");
             }
 
-        }while (a);
+        } while (a);
     }
 
     public static void edit(Connection connection) throws SQLException, IOException {
@@ -109,15 +101,14 @@ public class Menu {
             System.out.println("Input book_name, that you want to edit:");
             String bookName = scanner.next();
             List<Book> books = BookDB.findByName(bookName, connection);
-            if (BookDB.findByName(bookName, connection).size() == 0){
+            if (BookDB.findByName(bookName, connection).size() == 0) {
                 System.out.println("Sorry we don't have such book.");
                 all(connection);
                 System.out.println(" 1 - Try again.\n 2 - Main menu.");
                 String operation = scanner.next();
-                if(operation.equals("1")) a = true;
-                if(operation.equals("2")) a = false;
-            }
-            else if (books.size() == 1){
+                if (operation.equals("1")) a = true;
+                if (operation.equals("2")) a = false;
+            } else if (books.size() == 1) {
                 System.out.println("please enter new name of book.");
                 String newBookName = scanner.next();
                 System.out.print(books.get(0));
@@ -125,8 +116,7 @@ public class Menu {
                 a = false;
                 books.get(0).setBookName(newBookName);
                 System.out.println(" was changed to: " + books.get(0));
-            }
-            else {
+            } else {
                 int i = 1;
                 System.out.println("We have few books with such name please choose one by typing a number of book:");
                 for (Book book : BookDB.findByName(bookName, connection)) {
@@ -134,7 +124,7 @@ public class Menu {
                     i++;
                 }
                 int number = scanner.nextInt();
-                if (number < i){
+                if (number < i) {
                     System.out.println("please enter new name of book.");
                     String newBookName = scanner.next();
                     System.out.print(books.get(number - 1));
@@ -142,11 +132,10 @@ public class Menu {
                     a = false;
                     books.get(number - 1).setBookName(newBookName);
                     System.out.println(" was changed to: " + books.get(number - 1));
-                }
-                else System.out.println("You've putted wrong number, try again.");
+                } else System.out.println("You've putted wrong number, try again.");
             }
 
-        }while (a);
+        } while (a);
     }
 
     public static void all(Connection connection) throws IOException, SQLException {
